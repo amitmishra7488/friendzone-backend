@@ -1,8 +1,8 @@
-const {createUser} = require ('../controllers/user.controller')
+const {createUser, loginUser} = require ('../controllers/user.controller')
 const express = require('express')
-
 const routes= express.Router();
 
+// signup route
 routes.post('/signup', async(req,res)=>{
 
     const user = req.body;
@@ -16,5 +16,16 @@ routes.post('/signup', async(req,res)=>{
     }
 })
 
-
+// login route
+routes.post('/login',async (req, res) => {
+    const user = req.body;
+    const newUser = await loginUser(user);
+    console.log(newUser);
+    if(newUser.status){
+        res.status(404).json({ message: 'Error in login' });
+    }
+    else{
+        res.status(200).json({user:newUser,message: 'User Logged In successfully'});
+    }
+})
 module.exports=routes;
