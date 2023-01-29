@@ -10,8 +10,10 @@ const auth = require('../middleware/auth');
 routes.post('/signup', async (req, res) => {
 
     const user = req.body;
+    // user={"email":"abhi@gmail.com",
+    // "password":"123456"}
     const newUser = await createUser(user);
-
+    
     console.log(newUser);
     try {
         if (newUser.status) {
@@ -37,7 +39,7 @@ routes.post('/login', async (req, res) => {
     }
     else {
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-        res.status(200).json({ user: newUser, token: token, message: 'User Logged In successfully' });
+        res.status(200).send({ user: newUser, token: token, message: 'User Logged In successfully' });
     }
 })
 
