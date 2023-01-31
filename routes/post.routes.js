@@ -7,6 +7,7 @@ const postModel = require("../models/post.model");
 routes.post("/create", auth, async (req, res) => {
     try {
         // console.log(req.userId, 'from here in post');
+        console.log(req.userId, 'from here');
         const post = await postModel.create({ ...req.body, user: req.userId });
         return res.status(201).json(post);
     } catch (error) {
