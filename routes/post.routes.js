@@ -40,6 +40,40 @@ routes.get("/:id", async(req,res)=>{
     }
   
 })
+// 63d8b1c1c8fd7cd4c2cd81a4
+routes.put("/like",auth,async(req,res)=>{
+    try {
+        const postId= req.body.id;
+        const post = await postModel.findById(postId);
+        post.likes.push(req.userId);
+         postModel.findByIdAndUpdate(req.body.id, post, { new: true }, (error, updatedUser) => {
+            if (error) return next(error);
+            res.status(200).json(updatedUser);
+          }).populate('likes',"name dp");
+
+        // res.status(200).json(post);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+routes.put("/unlike",auth,async(req,res)=>{
+    try {
+        const postId= req.body.id;
+        const post = await postModel.findById(postId);
+        console.log(post.likes,"likes")
+        // post.likes= post.likes.filter(id => id!==`new ObjectId(${req.userId})`);
+
+        const details= await postModel.findByIdAndUpdate(req.body.id, {$pull : {likes:req.userId}}, { new: true }, (error, updatedUser) => {
+            if (error) return next(error);
+            res.status(200).json(updatedUser);
+          }).populate('likes','name dp');
+
+        // res.status(200).json(post);
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 
 

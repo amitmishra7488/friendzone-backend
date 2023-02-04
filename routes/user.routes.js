@@ -10,8 +10,7 @@ const auth = require('../middleware/auth');
 routes.post('/signup', async (req, res) => {
 
     const user = req.body;
-    // user={"email":"abhi@gmail.com",
-    // "password":"123456"}
+    
     const newUser = await createUser(user);
     
     console.log(newUser);
