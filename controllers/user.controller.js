@@ -88,6 +88,29 @@ const userProfile = async (userId) => {
     }
 }
 
+const getAllUser = async () =>{
+    const suggestionBox=[];
+    try{
+        const user = await userModel.find();
+        user.map(el=>{
+            const userData= {
+                name: el.name,
+                dp:el.dp
+            }
+            suggestionBox.push(userData)
+        })
+        return suggestionBox;
+    }
+    catch(error) {
+        return {
+            status: 'failed',
+            message: 'Try to login again'
+        }
+    }
+
+
+}
+
 
 const following = async(data,userId)=>{
     
@@ -115,5 +138,6 @@ module.exports = {
     createUser,
     loginUser,
     userProfile,
-    following
+    following,
+    getAllUser
 }

@@ -1,4 +1,4 @@
-const { createUser, loginUser, userProfile, following } = require('../controllers/user.controller')
+const { createUser, loginUser, userProfile, following,getAllUser } = require('../controllers/user.controller')
 const express = require('express')
 const routes = express.Router();
 const jwt = require('jsonwebtoken');
@@ -60,6 +60,21 @@ routes.get('/profile', auth, async(req, res) => {
         res.status(200).json({user:profile});
     }
 });
+
+
+routes.get('/suggestions', auth, async(req, res) => {
+   
+    const user = await getAllUser();
+    console.log(user);
+    if (user.status) {
+        res.status(404).json(user);
+    }
+    else{
+        res.status(200).json(user);
+    }
+});
+
+
 
 
 
