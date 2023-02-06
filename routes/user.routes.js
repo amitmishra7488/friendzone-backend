@@ -1,4 +1,4 @@
-const { createUser, loginUser, userProfile } = require('../controllers/user.controller')
+const { createUser, loginUser, userProfile, following } = require('../controllers/user.controller')
 const express = require('express')
 const routes = express.Router();
 const jwt = require('jsonwebtoken');
@@ -60,5 +60,23 @@ routes.get('/profile', auth, async(req, res) => {
         res.status(200).json({user:profile});
     }
 });
+
+
+
+routes.put("/followers",auth, async(req, res)=>{
+    const userId=req.userId;
+
+    const data = req.body;
+
+    const result = await following(data,userId);
+    console.log(result);
+
+    if(result.status === "failed"){
+        res.status(404).json({message:"not found glitch"})
+    }
+    else{
+        res.status(200).json(result);
+    }
+})
 
 module.exports = routes;

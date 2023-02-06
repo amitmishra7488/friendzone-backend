@@ -20,7 +20,7 @@ routes.get('/', async (req, res) => {
         const user = req.query.user;
         const searchQuery = user ? { user: user } : {};
       
-        const posts = await postModel.find(searchQuery).populate("user", "name");
+        const posts = await postModel.find(searchQuery).populate("user", "name dp");
       
         return res.status(200).json(posts);
        } catch (error) {
@@ -53,7 +53,7 @@ routes.put("/like",auth,async(req,res)=>{
 
         // res.status(200).json(post);
     } catch (error) {
-        console.log(error);
+        res.status(500).json(error);
     }
 })
 

@@ -88,8 +88,32 @@ const userProfile = async (userId) => {
     }
 }
 
+
+const following = async(data,userId)=>{
+    
+
+    try{
+        const following=await userModel.findByIdAndUpdate(data.id, {$push: {followers: userId}},{new: true})
+
+        const follower=await userModel.findByIdAndUpdate(userId, {$push: {following: data.id}},{new: true})
+        console.log(follower)
+        return {
+            status: 'success',
+            message:   "done"
+        }
+    }
+    catch(error){
+        return {
+            status: 'failed',
+            message: "check ur password or email"
+        }
+    }
+
+}
+
 module.exports = {
     createUser,
     loginUser,
-    userProfile
+    userProfile,
+    following
 }
