@@ -7,7 +7,8 @@ const userSchema = new Schema({
     password: { type: String, required: true, minlength: 6 },
     dp:{type: String, default:'https://www.freeiconspng.com/thumbs/profile-icon-png/profile-icon-9.png'},
     followers:[{type: Schema.Types.ObjectId, ref:"User"}],
-    following:[{type: Schema.Types.ObjectId, ref:"User"}]
+    following:[{type: Schema.Types.ObjectId, ref:"User"}],
+    bio:{type: String, default:"Add Bio" , minlength: 6}
 
 }, { timestamps: true })
 

@@ -71,6 +71,10 @@ const userProfile = async (userId) => {
                 email: userExists.email,
                 name: userExists.name,
                 id:userExists._id,
+                dp:userExists.dp,
+                followers: userExists.followers,
+                following: userExists.following,
+                bio: userExists.bio,
                 message:"Successfully found user"
             }
         }
