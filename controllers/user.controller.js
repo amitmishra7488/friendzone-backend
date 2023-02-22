@@ -64,21 +64,22 @@ const loginUser = async (data) => {
 
 const userProfile = async (userId) => {
 
-    const userExists = await userModel.findOne({ _id:userId})
+    const userExists = await userModel.findOne({ _id: userId })
     try {
-        if(userExists) {
+        if (userExists) {
             return {
                 email: userExists.email,
                 name: userExists.name,
-                id:userExists._id,
-                dp:userExists.dp,
+                userName: userExists.userName,
+                id: userExists._id,
+                dp: userExists.dp,
                 followers: userExists.followers,
                 following: userExists.following,
                 bio: userExists.bio,
-                message:"Successfully found user"
+                message: "Successfully found user"
             }
         }
-        else{
+        else {
             return {
                 status: 'failed',
                 message: "check ur password or email"
@@ -92,20 +93,20 @@ const userProfile = async (userId) => {
     }
 }
 
-const getAllUser = async () =>{
-    const suggestionBox=[];
-    try{
+const getAllUser = async () => {
+    const suggestionBox = [];
+    try {
         const user = await userModel.find();
-        user.map(el=>{
-            const userData= {
+        user.map(el => {
+            const userData = {
                 name: el.name,
-                dp:el.dp
+                dp: el.dp
             }
             suggestionBox.push(userData)
         })
         return suggestionBox;
     }
-    catch(error) {
+    catch (error) {
         return {
             status: 'failed',
             message: 'Try to login again'
@@ -116,20 +117,53 @@ const getAllUser = async () =>{
 }
 
 
-const following = async(data,userId)=>{
-    
+const following = async (data, userId) => {
 
-    try{
-        const following=await userModel.findByIdAndUpdate(data.id, {$push: {followers: userId}},{new: true})
 
-        const follower=await userModel.findByIdAndUpdate(userId, {$push: {following: data.id}},{new: true})
+    try {
+        const following = await userModel.findByIdAndUpdate(data.id, { $push: { followers: userId } }, { new: true })
+
+        const follower = await userModel.findByIdAndUpdate(userId, { $push: { following: data.id } }, { new: true })
         console.log(follower)
         return {
             status: 'success',
-            message:   "done"
+            message: "done"
         }
     }
-    catch(error){
+    catch (error) {
+        return {
+            status: 'failed',
+            message: "check ur password or email"
+        }
+    }
+
+}
+
+const userBioDp = async (userId, bio, dp,userName) => {
+
+    try{
+        if(bio =="" && userName==""){
+            const userProfile = await userModel.findByIdAndUpdate(userId, { dp:dp }, { new: true});
+            console.log(userProfile);
+        }
+        else if(dp =="" && userName==""){
+            const userProfile = await userModel.findByIdAndUpdate(userId, { bio:bio }, { new: true});
+            console.log(userProfile);
+        }
+        else if(bio =="" && userName==""){
+            const userProfile = await userModel.findByIdAndUpdate(userId, { userName: userName }, { new: true});
+            console.log(userProfile);
+        }
+        else{
+            const userProfile = await userModel.findByIdAndUpdate(userId, { bio: bio,dp:dp,userName:userName }, { new: true});
+            console.log(userProfile);
+        }
+        return {
+            status: 'success',
+            message: "done"
+        }
+    }
+    catch(error) {
         return {
             status: 'failed',
             message: "check ur password or email"
@@ -143,5 +177,6 @@ module.exports = {
     loginUser,
     userProfile,
     following,
-    getAllUser
+    getAllUser,
+    userBioDp
 }

@@ -1,4 +1,4 @@
-const { createUser, loginUser, userProfile, following,getAllUser } = require('../controllers/user.controller')
+const { createUser, loginUser, userProfile, following,getAllUser, userBioDp } = require('../controllers/user.controller')
 const express = require('express')
 const routes = express.Router();
 const jwt = require('jsonwebtoken');
@@ -92,6 +92,27 @@ routes.put("/followers",auth, async(req, res)=>{
     else{
         res.status(200).json(result);
     }
+})
+
+
+
+routes.put("/bioDP", auth, async(req,res)=>{
+    const userId = req.userId;
+    console.log("userID",userId)
+    let {bio,dp,userName} = req.body;
+
+    const profile = await userBioDp(userId,bio,dp,userName)
+    console.log(profile);
+
+    if (profile.status=="failed") {
+        res.status(404).json(profile);
+    }
+    else{
+        res.status(200).json({user:profile})
+    }
+
+    
+
 })
 
 module.exports = routes;
