@@ -4,6 +4,7 @@ const routes = express.Router();
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const auth = require('../middleware/auth');
+const userModel = require('../models/user.model');
 
 
 // signup route
@@ -63,8 +64,8 @@ routes.get('/profile', auth, async(req, res) => {
 
 
 routes.get('/suggestions', auth, async(req, res) => {
-   
-    const user = await getAllUser();
+   const userId= req.userId;
+    const user = await getAllUser(userId);
     console.log(user);
     if (user.status) {
         res.status(404).json(user);
@@ -73,8 +74,6 @@ routes.get('/suggestions', auth, async(req, res) => {
         res.status(200).json(user);
     }
 });
-
-
 
 
 

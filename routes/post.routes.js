@@ -9,7 +9,8 @@ routes.post("/create", auth, async (req, res) => {
         // console.log(req.userId, 'from here in post');
         console.log(req.userId, 'from here');
         const post = await postModel.create({ ...req.body, user: req.userId });
-        return res.status(201).json(post);
+        const populatedPost = await postModel.findById(post._id).populate('user', 'dp userName name').exec();
+        return res.status(201).json(populatedPost);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -28,22 +29,10 @@ routes.get('/', async (req, res) => {
        }
 })
 
-routes.get("/:id", async(req,res)=>{
+routes.get("/profilePost",auth, async(req,res)=>{
     try {
-        const {id} = req.params;
+        const id = req.userId;
 
-        const post= await postModel.findById(id);
-
-        res.status(200).json(post);
-    } catch (error) {
-        res.status(404).json({message: error.message});
-    }
-  
-})
-
-routes.get("/userid/:id", async(req,res)=>{
-    try{
-        const id = req.params.id;
         const post = postModel.find({ user: id }).exec((err, docs) => {
             if (err) {
                 console.error(err);
@@ -53,11 +42,30 @@ routes.get("/userid/:id", async(req,res)=>{
                 res.status(200).json(docs);
             }
             });
-    }
-    catch(error){
+        console.log(post);
+    } catch (error) {
         res.status(404).json({message: error.message});
     }
+  
 })
+
+// routes.get("/userid/:id", async(req,res)=>{
+//     try{
+//         const id = req.params.id;
+//         const post = postModel.find({ user: id }).exec((err, docs) => {
+//             if (err) {
+//                 console.error(err);
+//                 res.status(500).send('Error retrieving posts');
+//             } else {
+//                 console.log(docs);
+//                 res.status(200).json(docs);
+//             }
+//             });
+//     }
+//     catch(error){
+//         res.status(404).json({message: error.message});
+//     }
+// })
 // 63d8b1c1c8fd7cd4c2cd81a4
 routes.put("/like",auth,async(req,res)=>{
     try {

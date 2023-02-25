@@ -1,4 +1,5 @@
 const userModel = require('../models/user.model')
+const postModel = require('../models/post.model')
 const bcrypt = require('bcrypt');
 
 const createUser = async (data) => {
@@ -64,7 +65,10 @@ const loginUser = async (data) => {
 
 const userProfile = async (userId) => {
 
-    const userExists = await userModel.findOne({ _id: userId })
+    const userExists = await userModel.findById(userId)
+    const dummy= await postModel.find({"user":userId});
+    const user={};
+    const posts = dummy.map(el=> ({user:el.user}));
     try {
         if (userExists) {
             return {
@@ -76,7 +80,9 @@ const userProfile = async (userId) => {
                 followers: userExists.followers,
                 following: userExists.following,
                 bio: userExists.bio,
-                message: "Successfully found user"
+                message: "Successfully found user",
+                posts:posts
+                
             }
         }
         else {
@@ -93,14 +99,17 @@ const userProfile = async (userId) => {
     }
 }
 
-const getAllUser = async () => {
+const getAllUser = async (userId) => {
     const suggestionBox = [];
     try {
-        const user = await userModel.find();
-        user.map(el => {
+        const following = await userModel.findOne({ _id: userId }).select('following');
+        const suggestedUsers = await userModel.find({ _id: { $nin: following.following } });
+
+        suggestedUsers.map(el => {
             const userData = {
                 name: el.name,
-                dp: el.dp
+                dp: el.dp,
+                id:el._id
             }
             suggestionBox.push(userData)
         })
@@ -118,7 +127,6 @@ const getAllUser = async () => {
 
 
 const following = async (data, userId) => {
-
 
     try {
         const following = await userModel.findByIdAndUpdate(data.id, { $push: { followers: userId } }, { new: true })
