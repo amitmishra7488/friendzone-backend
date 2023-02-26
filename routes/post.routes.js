@@ -49,24 +49,7 @@ routes.get("/profilePost",auth, async(req,res)=>{
   
 })
 
-// routes.get("/userid/:id", async(req,res)=>{
-//     try{
-//         const id = req.params.id;
-//         const post = postModel.find({ user: id }).exec((err, docs) => {
-//             if (err) {
-//                 console.error(err);
-//                 res.status(500).send('Error retrieving posts');
-//             } else {
-//                 console.log(docs);
-//                 res.status(200).json(docs);
-//             }
-//             });
-//     }
-//     catch(error){
-//         res.status(404).json({message: error.message});
-//     }
-// })
-// 63d8b1c1c8fd7cd4c2cd81a4
+
 routes.put("/like",auth,async(req,res)=>{
     try {
         const postId= req.body.id;
