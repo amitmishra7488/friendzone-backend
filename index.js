@@ -12,6 +12,9 @@ app.use(express.json());
 app.use('/user', userRoutes);
 app.use("/post", postRoutes);
 
+app.get('/', async(req,res)=>{
+    res.status(200).send("Welcome to friendZone!");
+});
 
 
 
