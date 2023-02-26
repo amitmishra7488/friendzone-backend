@@ -21,7 +21,7 @@ routes.get('/', async (req, res) => {
         const user = req.query.user;
         const searchQuery = user ? { user: user } : {};
       
-        const posts = await postModel.find(searchQuery).populate("user", "name dp");
+        const posts = await postModel.find(searchQuery).populate("user", "name dp").sort({createdAt:-1});
       
         return res.status(200).json(posts);
        } catch (error) {
