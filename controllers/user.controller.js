@@ -15,11 +15,13 @@ const createUser = async (data) => {
         }
 
         // hashing password of user 
+        else{
         const hashedPassword = await bcrypt.hash(data.password, 10);
         console.log(hashedPassword);
         data.password = hashedPassword;
         await userModel.create(data);
         return data;
+    }
     }
     catch (e) {
         return {
